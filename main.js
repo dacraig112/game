@@ -1,5 +1,7 @@
-const GAME = document.querySelector('#game');
-let go = document.querySelector('#go');
+const GAME = document.querySelector('#game'); 
+const GAME_HEIGHT = 400;
+const GAME_WIDTH = 400;
+const START = document.querySelector('#start');
 //for 'wobble'
 let currentPos = 0;
 let x;
@@ -8,7 +10,7 @@ let freq = 0.1;
 // for 'rotation'
 let spinner = 0;
 let thing;
-let level = 4;
+let level = 1;
 
 
 let raf = window.requestAnimationFrame ||
@@ -102,13 +104,26 @@ function createThing() {
         raf(moveStar)
     };
     if (thing.className === 'wobbler') {
-        raf(moveStar)
+        raf(moveDiag)
     };
+   
 
 }
 
 
-
+function moveRock() {
+    x = amp * Math.sin(freq * currentPos);
+    if (currentPos < 800) {
+        thing.style.top = currentPos + 'px';
+        thing.style.left = 480 + x + 'px';
+        currentPos += 1.5;
+    }
+    if (currentPos >= 400) {
+        thing.remove();
+        return;
+    }
+    raf(moveRock)
+}
 
 function moveRock() {
     x = amp * Math.sin(freq * currentPos);
@@ -127,12 +142,12 @@ function moveRock() {
 function moveDiag() {
     x = amp * Math.sin(freq * currentPos);
     if (currentPos < 800) {
-        box.style.top = currentPos + 'px';
-        box.style.left = 480 + x + 'px';
+        thing.style.top = currentPos + 'px';
+        thing.style.left = 480 + x + 'px';
         currentPos += 1;
     }
     if (currentPos >= 400) {
-        box.remove();
+        thing.remove();
         return;
     }
     raf(moveDiag)
@@ -145,9 +160,25 @@ function moveStar() {
     thing.style.transform = spin;
     spinner += 50; // 60 deg rotation preserves 'star' shape
      
-    currentPos += 1;
+    currentPos += 3;
     raf(moveStar)
 }; 
 
-// go.addEventListener('click', moveTriangle); 
-go.addEventListener('click', createThing);
+start.addEventListener('click', createThing);
+
+/*
+function start(e) {
+   if (e.which == 13 /*|| e.type === 'click'*//*) {
+    localStorage.user1 = PLAYER_1.value;
+    window.addEventListener('keydown', moveDodger);
+    window.addEventListener('keyup', stopDodger);
+  
+  
+    START.style.display = 'none'
+  
+    gameInterval = setInterval(function () {
+      createRock(Math.floor(Math.random() * (GAME_WIDTH - 20)))
+    }, 1500)
+  }
+  }
+  */
